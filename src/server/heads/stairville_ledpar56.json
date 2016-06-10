@@ -1,0 +1,17 @@
+{
+    "manufacturer": "Stairville",
+    "model": "LedPar56",
+    "haveModes": false,
+    "channels": ["macros", "red", "green", "blue", "speed"],
+    "ranges": {
+        "macro": {
+            "type": "option",
+            "options": [
+                {"value": 0,   "label": "RGB Control"},
+                {"value": 64,  "label": "7 Color Fade"},
+                {"value": 128, "label": "7 Color Change"},
+                {"value": 192, "label": "3 Color Change"}
+            ]
+        }
+    }
+}

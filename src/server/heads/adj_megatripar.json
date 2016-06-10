@@ -1,0 +1,59 @@
+{
+    "manufacturer": "American DJ",
+    "model": "MegaTriPar",
+    "haveModes": true,
+    "modes": {
+        "1": ["macros"],
+        "2": ["macros", "dimmer"],
+        "3": ["red", "green", "blue"],
+        "4": ["red", "green", "blue", "dimmer"],
+        "5": ["red", "green", "blue", "dimmer", "macros"],
+        "6": ["red", "green", "blue", "macros", "strobing", "dimmer"]
+    },
+    "ranges": {
+        "macros": {
+            "type": "option",
+            "options": [
+                {"value": 1, "label": "Bastard Amber"},
+                {"value": 8, "label": "Medium Amber"},
+                {"value": 16, "label": "Pale Amber Gold"},
+                {"value": 24, "label": "Gallo Gold"},
+                {"value": 32, "label": "Golden Amber"},
+                {"value": 40, "label": "Light Red"},
+                {"value": 48, "label": "Medium Red"},
+                {"value": 56, "label": "Medium Pink"},
+                {"value": 64, "label": "Broadway Pink"},
+                {"value": 72, "label": "Follies Pink"},
+                {"value": 80, "label": "Light Lavender"},
+                {"value": 88, "label": "Special Lavender"},
+                {"value": 96, "label": "Lavender"},
+                {"value": 104, "label": "Indigo"},
+                {"value": 112, "label": "Hemsley Blue"},
+                {"value": 120, "label": "Tipton Blue"},
+                {"value": 128, "label": "Light Steel Blue"},
+                {"value": 136, "label": "Light Sky Blue"},
+                {"value": 144, "label": "Sky Blue"},
+                {"value": 152, "label": "Brilliant Blue"},
+                {"value": 160, "label": "Light Green Blue"},
+                {"value": 168, "label": "Bright Blue"},
+                {"value": 176, "label": "Primary Blue"},
+                {"value": 184, "label": "Congo Blue"},
+                {"value": 192, "label": "Pale Yellow Green"},
+                {"value": 200, "label": "Moss Green"},
+                {"value": 208, "label": "Primary Green"},
+                {"value": 216, "label": "Double CTB"},
+                {"value": 224, "label": "FULL CTB"},
+                {"value": 232, "label": "Half CTB"},
+                {"value": 240, "label": "Dark Blue"},
+                {"value": 248, "label": "White"},
+            ]
+        },
+        "strobing": {
+            "type": "slider",
+            "options": [
+                {"value": 0, "label": "Off"},
+                {"value": 16, "label": "Slow - Fast"}
+            ]
+        }
+    }
+}

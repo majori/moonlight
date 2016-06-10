@@ -1,6 +1,6 @@
 'use strict'
 
-var SerialPort  = require('serialport').SerialPort
+var serialport  = require('serialport');
 var Promise     = require('bluebird');
 
 var cfg         = require('../config');
@@ -12,18 +12,27 @@ const    ENTTEC_PRO_DMX_STARTCODE = 0x00
        , ENTTEC_PRO_RECV_DMX_PKT  = 0x05
        ;
 
-var enttec = {};
+var enttec = {
+    dmx: {},
+    midi: {}
+};
 
 // ## Public functions
 //
 
 enttec.init = function() {
     return new Promise((resolve,reject) => {
-        enttec.dmx = {};
         enttec.dmx.universe = new Buffer(512);
         enttec.dmx.universe.fill(0);
 
-        enttec._dev = new SerialPort(cfg.enttecPath, {
+        serialport.list(function (err, ports) {
+          ports.forEach(function(port) {
+            //console.log(port);
+          });
+        });
+
+
+        enttec._dev = new serialport.SerialPort(cfg.enttecPath, {
             'baudrate': 250000,
             'databits': 8,
             'stopbits': 2,
@@ -43,20 +52,22 @@ enttec.close = function(cb) {
     enttec._dev.close(cb);
 }
 
-enttec.update = function(u) {
+// DMX-related functions
+
+enttec.dmx.update = function(u) {
     for(var c in u) {
         enttec.dmx.universe[c] = u[c];
     }
     _sendDmxUniverse();
 }
 
-enttec.updateAll = function(v) {
+enttec.dmx.updateAll = function(v) {
     for(var i = 0; i < 512; i++) {
         enttec.dmx.universe[i] = v;
     }
 }
 
-enttec.getDmxChannel = function(c) {
+enttec.dmx.getChannel = function(c) {
     return enttec.dmx.universe[c];
 }
 
