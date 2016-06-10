@@ -11,6 +11,6 @@ cfg.publicPath = cfg.rootPath + '/public';
 cfg.httpPort = process.env.MOONLIGHT_HTTP_PORT || 5000,
 
 cfg.enttecPath = process.env.MOONLIGHT_ENTTEC_PATH || '/dev/ttyUSB0';
-cfg.enttecAPIKey = process.env.MOONLIHGT_ENTTEC_APIKEY;
+cfg.enttecAPIKey = process.env.MOONLIGHT_ENTTEC_APIKEY;
 
 module.exports = cfg;
