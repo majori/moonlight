@@ -3,26 +3,25 @@ var _       = require('lodash');
 
 var enttec  = require('./enttec');
 var heads   = require('./heads');
+var logger  = require('../logger');
 
-var dmx = {};
+var dmx = {
+    ready: false
+};
 
 dmx.availableHeads = function() {
-    var keys = [];
-    _.forEach(Object.keys(heads), (head) => {
-        keys.push(_.replace(head, '_', ' '));
-    });
-    return keys;
+
 }
 
 enttec.init()
 .then(() => {
-    console.log('Enttec connected succesfully');
-    enttec.close();
+    logger.info('Enttec connected succesfully');
+    dmx.ready = true;
+    //enttec.dmx.update([255,255,255,0,0,255]);
+    //enttec.midi.sendMidi([0x01,0x01,0x01]);
 })
 .catch((err) => {
     console.log(err);
 });
-
-dmx.availableHeads();
 
 module.exports = dmx;

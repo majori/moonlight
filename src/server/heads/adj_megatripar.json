@@ -45,7 +45,7 @@
                 {"value": 224, "label": "FULL CTB"},
                 {"value": 232, "label": "Half CTB"},
                 {"value": 240, "label": "Dark Blue"},
-                {"value": 248, "label": "White"},
+                {"value": 248, "label": "White"}
             ]
         },
         "strobing": {

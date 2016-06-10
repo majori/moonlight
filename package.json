@@ -16,12 +16,15 @@
   },
   "dependencies": {
     "bluebird": "^3.4.0",
+    "buffer-reverse": "^1.0.1",
     "express": "^4.13.4",
+    "lodash": "^4.13.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "serialport": "^3.1.2",
     "socket.io": "^1.4.6",
-    "socket.io-client": "^1.4.6"
+    "socket.io-client": "^1.4.6",
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "babel-loader": "^6.2.4",
