@@ -22,6 +22,6 @@ app.get('/', (req, res) => {
 });
 
 process.on('SIGINT', () => {
-  enttec.close();
-  process.exit(0);
+    enttec.close();
+    process.exit(0);
 });
