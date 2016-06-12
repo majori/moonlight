@@ -1,6 +1,6 @@
 {
-    "manufacturer": "Stairville",
     "model": "LedPar56",
+    "manufacturer": "Stairville",
     "haveModes": false,
     "channels": ["macros", "red", "green", "blue", "speed"],
     "ranges": {

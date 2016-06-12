@@ -1,12 +1,13 @@
 {
   "name": "moonlight",
   "version": "0.0.1",
-  "description": "",
+  "description": "DMX-controller with web UI",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/test.js",
     "start": "node src/server/server.js",
-    "dev": "webpack -d --watch",
+    "start-dev": "nodemon src/server/server.js",
+    "build-dev": "webpack -d --watch",
     "build": "webpack -p"
   },
   "author": "Antti Kivimäki <majoriz11@gmail.com>",

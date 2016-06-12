@@ -1,0 +1,81 @@
+{
+    "model": "Pro518",
+    "manufacturer": "Martin",
+    "haveModes": true,
+    "modes": {
+        "1": ["setup", "dimmer", "color_wheel", "gobo_wheel", "effect_wheel", "pan", "tilt"],
+        "2": ["setup", "dimmer", "color_wheel", "gobo_wheel", "effect_wheel", "pan", "tilt", "pan/tilt_speed", "color/dimmer_speed"],
+        "3": ["setup", "dimmer", "color_wheel", "gobo_wheel", "effect_wheel", "pan", "pan_fine", "tilt", "tilt_fine"]
+    },
+    "ranges": {
+        "setup": {
+            "type": "mixed",
+            "options": [
+                {"value": 0, "label": "Default", "type": "option"},
+                {"value": 6, "label": "Fan low", "type": "option"},
+                {"value": 11, "label": "Strobe, fast -> slow", "type": "slider"},
+                {"value": 139, "label": "Remote stand-alone, auto trigger", "type": "option"},
+                {"value": 171, "label": "Remote stand-alone, music trigger", "type": "option"},
+                {"value": 203, "label": "Reset fixture", "type": "option"},
+                {"value": 236, "label": "Lamp power ON", "type": "option"},
+                {"value": 253, "label": "Lamp power OFF", "type": "option"}
+            ]
+        },
+        "color_wheel": {
+            "type": "option",
+            "options": [
+                {"value": 0, "label": "White"},
+                {"value": 4, "label": "White / Pink split"},
+                {"value": 8, "label": "Pink"},
+                {"value": 12, "label": "Pink / Magenta split"},
+                {"value": 16, "label": "Magenta"},
+                {"value": 20, "label": "Magenta / Primary Red split"},
+                {"value": 24, "label": "Primary Red"},
+                {"value": 28, "label": "Primary Red / Flame Red split"},
+                {"value": 32, "label": "Flame Red"},
+                {"value": 36, "label": "Flame Red / Dark Orange split"},
+                {"value": 40, "label": "Dark Orange"},
+                {"value": 44, "label": "Dark Orange / Orange split"},
+                {"value": 48, "label": "Orange"},
+                {"value": 52, "label": "Orange / Yellow split"},
+                {"value": 56, "label": "Yellow"},
+                {"value": 60, "label": "Yellow / Light Green split"},
+                {"value": 64, "label": "Light Green"},
+                {"value": 68, "label": "Light Green / Fern Green split"},
+                {"value": 72, "label": "Fern Green"},
+                {"value": 76, "label": "Fern Green / Turquoise split"},
+                {"value": 80, "label": "Turquoise"},
+                {"value": 84, "label": "Turquoise / Cyan split"},
+                {"value": 88, "label": "Cyan"},
+                {"value": 92, "label": "Cyan / Light Blue split"},
+                {"value": 96, "label": "Light Blue"},
+                {"value": 100, "label": "Light Blue / Dark Lavender Split"},
+                {"value": 104, "label": "Dark Lavender"},
+                {"value": 108, "label": "Dark Lavender / Dark Blue split"},
+                {"value": 112, "label": "Dark Blue"},
+                {"value": 116, "label": "Dark Blue / UV Pass split"},
+                {"value": 120, "label": "UV Pass"},
+                {"value": 124, "label": "UV Pass / Multi Color 1 split"},
+                {"value": 128, "label": "Multi Color 1"},
+                {"value": 132, "label": "Multi Color 1 / Multi Color 2 split"},
+                {"value": 136, "label": "Multi Color 2"},
+                {"value": 140, "label": "CW rotation, fast -> slow "},
+                {"value": 198, "label": "CCW rotation, slow -> fast"}
+            ]
+        },
+        "gobo_wheel": {
+            "type": "mixed",
+            "options": [
+                {"value": 0, "label": "open", "type": "option"},
+                {"value": 1, "label": "Default", "type": "slider"},
+                {"value": 25, "label": "Default", "type": "option"},
+                {"value": 28, "label": "Default", "type": "slider"},
+                {"value": 52, "label": "Default", "type": "slider"},
+                {"value": 76, "label": "Default", "type": "option"},
+                {"value": 79, "label": "Default", "type": "slider"},
+                {"value": 103, "label": "Default", "type": "slider"},
+                {"value": 127, "label": "Default", "type": "option"}
+            ]
+        }
+    }
+}

@@ -1,0 +1,5 @@
+{
+    "model": "Generic channel",
+    "haveModes": false,
+    "channels": ["dimmer"]
+}

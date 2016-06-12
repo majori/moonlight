@@ -1,6 +1,6 @@
 {
-    "manufacturer": "American DJ",
     "model": "MegaTriPar",
+    "manufacturer": "American DJ",
     "haveModes": true,
     "modes": {
         "1": ["macros"],
@@ -49,10 +49,10 @@
             ]
         },
         "strobing": {
-            "type": "slider",
+            "type": "mixed",
             "options": [
-                {"value": 0, "label": "Off"},
-                {"value": 16, "label": "Slow - Fast"}
+                {"value": 0, "label": "Off", "type": "option"},
+                {"value": 16, "label": "Slow - Fast", "type": "slider"}
             ]
         }
     }

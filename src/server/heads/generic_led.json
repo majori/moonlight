@@ -1,0 +1,5 @@
+{
+    "model": "Generic LED",
+    "haveModes": false,
+    "channels": ["red", "green", "blue"]
+}
