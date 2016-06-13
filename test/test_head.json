@@ -1,0 +1,13 @@
+{
+    "model": "Test-Head-1",
+    "manufacturer": "Manufacturer",
+    "haveModes": true,
+    "modes": {
+        "1": ["macros"],
+        "2": ["macros", "dimmer"],
+        "3": ["red", "green", "blue"],
+        "4": ["red", "green", "blue", "dimmer"],
+        "5": ["red", "green", "blue", "dimmer", "macros"],
+        "6": ["red", "green", "blue", "macros", "strobing", "dimmer"]
+    }
+}
