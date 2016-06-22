@@ -1,10 +1,34 @@
 import React from 'react';
 import {render} from 'react-dom';
+import { Router, Route, Link} from 'react-router';
 
-class App extends React.Component {
+import Home from "./components/Home";
+import Patch from "./components/Patch";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+const App = React.createClass({
   render () {
-    return <p> Hello React!</p>;
+    return (
+      <div className="site__wrapper">
+        <Header />
+        <div className="app-container">
+          {this.props.children}
+        </div>
+        <Footer />
+      </div>
+    );
   }
-}
+});
 
-render(<App/>, document.getElementById('app'));
+render((
+  <Router>
+    <Route history={history}>
+      <Route component={App}>
+        <Route path='/' component={Home} />
+        <Route path='/patch' component={Patch} />
+      </Route>
+    </Route>
+  </Router>
+
+), document.getElementById('app'));

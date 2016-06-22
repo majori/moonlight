@@ -20,6 +20,9 @@ var config = {
             }
         ]
     },
+    resolve: {
+      extensions: ['', '.js', '.jsx']
+    },
     plugins: [
         new livereload({appendScriptTag: true})
     ]
