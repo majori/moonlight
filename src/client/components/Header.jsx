@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router';
 
 class Header extends React.Component {
     constructor(props) {
@@ -6,7 +7,13 @@ class Header extends React.Component {
         this.displayName = 'Header';
     }
     render() {
-        return <div>Header</div>;
+        return (
+        <div>
+          <span>Links: </span>
+          <Link to="/">Home</Link>
+          <Link to="/patch">Patch</Link>
+        </div>
+        );
     }
 }
 
