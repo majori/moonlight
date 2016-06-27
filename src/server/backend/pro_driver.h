@@ -2,13 +2,11 @@
 #define _PRO_DRIVER_H
 
 #include <stdint.h>
-#include "ftd2xx.h"
+#include "./lib/ftd2xx.h"
 
 /********************** PLEASE SET THESE FIRST **********************************/
 
 /******************** PRO MK2 LABELS: ASSIGN AS PER YOUR API (request the pdf if you don't have one) *********************/
-// THE API Key is LSB First: so if it says 11223344 .. define it as ... 44,33,22,11
-
 #define SET_PORT_ASSIGNMENT_LABEL       0
 #define SEND_DMX_PORT2                  0
 #define RECEIVE_DMX_PORT2               0
@@ -79,14 +77,15 @@ struct ReceivedDmxCosStruct
 
 class EnttecPro {
 public:
+    EnttecPro();
+    bool Init();
     void ReceiveMIDI(int PortLabel);
-    void SendMIDI(int PortLabel, unsigned char channel, unsigned char note, unsigned char velocity);
+    bool SendMIDI(int PortLabel, unsigned char channel, unsigned char note, unsigned char velocity);
     void ReceiveDMX(int PortLabel);
-    void SendDMX(int PortLabel);
-    void enable_midi();
-    void init_promk2();
+    bool SendDMX(int PortLabel, std::array<uint16_t, 512>*);
     bool setApiKey();
 
+private:
     int      FTDI_SendData(int label, unsigned char *data, unsigned int length);
     int      FTDI_ReceiveData(int label, unsigned char *data, unsigned int expected_length);
     uint8_t  FTDI_SendDataToPro(uint8_t label, unsigned char *data, uint32_t length);
@@ -97,11 +96,12 @@ public:
     void     FTDI_ClosePort();
     void     FTDI_PurgeBuffer();
     void     FTDI_Reload();
+    void     enable_midi();
 
-private:
-    unsigned char _APIKey[];
-    FT_HANDLE _device_handle = NULL;
+    unsigned char _APIKey[4] = {0x00, 0x00, 0x00, 0x00};
+    FT_HANDLE _device_handle;
     DMXUSBPROParamsType _PRO_Params;
+
 };
 
 #endif
