@@ -3,6 +3,7 @@
 
 #include <array>
 
+#include "fx.h"
 #include "patch.h"
 #include "pro_driver.h"
 
@@ -13,14 +14,15 @@ class DMX
 public:
     DMX();
     ~DMX();
-    bool initDriver();
     void sendUniverse();
 
 private:
     EnttecPro _driver;
-    std::array<uint16_t, 512> _universe;
     bool _readyToOutput;
 
+    std::array<uint8_t, 512> _universe;
+    std::vector<Group*> _groups;
+    std::vector<Head*> _heads;
 };
 
 } // Namespace

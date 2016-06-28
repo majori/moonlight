@@ -79,10 +79,10 @@ class EnttecPro {
 public:
     EnttecPro();
     bool Init();
-    void ReceiveMIDI(int PortLabel);
-    bool SendMIDI(int PortLabel, unsigned char channel, unsigned char note, unsigned char velocity);
+    bool SendDMX(std::array<uint8_t, 512>*);
     void ReceiveDMX(int PortLabel);
-    bool SendDMX(int PortLabel, std::array<uint16_t, 512>*);
+    bool SendMIDI(unsigned char channel, unsigned char note, unsigned char velocity);
+    void ReceiveMIDI(int PortLabel);
     bool setApiKey();
 
 private:

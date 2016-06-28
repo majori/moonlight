@@ -1,8 +1,8 @@
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #include "dmx.h"
-#include "patch.h"
-#include "pro_driver.h"
 
 using namespace Moonlight;
 
@@ -18,12 +18,11 @@ DMX::~DMX()
 
 }
 
-bool DMX::initDriver()
-{
-
-}
-
 void DMX::sendUniverse()
 {
-    _driver.SendDMX(SEND_DMX_PORT1, &_universe);
+    if (_readyToOutput) _driver.SendDMX(&_universe);
+}
+
+void DMX::patchHead(std::vector<std::string> channels, unsigned short int startChannel) {
+    _heads.push(new Head(channels, startChannel));
 }

@@ -32,18 +32,21 @@ bool EnttecPro::Init()
     }
     else
     {
-        uint16_t device_connected{0};
-        for (int i=0;i<Num_Devices;i++)
+        if ( _device_handle == NULL)
         {
-           if (device_connected)
-               break;
-           device_connected = FTDI_OpenDevice(i);
-        }
+            uint16_t device_connected{0};
+            for (int i=0;i<Num_Devices;i++)
+            {
+               if (device_connected)
+                   break;
+               device_connected = FTDI_OpenDevice(i);
+            }
 
-        if (!device_connected)
-        {
-            std::cerr << "Devices found, but cannot open" << std::endl;
-            return false;
+            if (!device_connected)
+            {
+                std::cerr << "Devices found, but cannot open" << std::endl;
+                return false;
+            }
         }
 
         // Clear the buffer
@@ -63,7 +66,7 @@ bool EnttecPro::Init()
             res = FTDI_SendData(SET_API_KEY_LABEL,_APIKey,4);
             if (res != TRUE)
             {
-                std::cout << "PRO Mk2 ... Activation failed " << std::endl;
+                std::cerr << " --- Activation failed " << std::endl;
             }
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -71,18 +74,18 @@ bool EnttecPro::Init()
             enable_midi();
 
             // Test DMX
-            std::array<uint16_t,512> testUniverse;
+            std::array<uint8_t,512> testUniverse;
             testUniverse.fill(0);
-            if ( !SendDMX(SEND_DMX_PORT1, &testUniverse))
+            if ( !SendDMX(&testUniverse))
             {
-                std::cout << "DMX testing failed" << std::endl;
+                std::cerr << " --- DMX testing failed" << std::endl;
                 return false;
             }
 
             // Test MIDI
-            if ( !SendMIDI(SEND_MIDI_PORT,0x10,0x20,0x12 ))
+            if ( !SendMIDI(0x10,0x20,0x12) )
             {
-                std::cout << "MIDI testing failed" << std::endl;
+                std::cerr << " --- MIDI testing failed" << std::endl;
                 return false;
             }
 
@@ -92,13 +95,13 @@ bool EnttecPro::Init()
         }
         else
         {
-            std::cerr << "PRO Mk2 have wrong hardware version: " << std::endl;
+            std::cerr << "PRO Mk2 has wrong hardware version for some reason" << std::endl;
             return false;
         }
     }
 }
 
-bool EnttecPro::SendDMX(int PortLabel, std::array<uint16_t, 512>* universe)
+bool EnttecPro::SendDMX(std::array<uint8_t, 512>* universe)
 {
     unsigned char myDmx[513];
     BOOL res =0;
@@ -110,7 +113,7 @@ bool EnttecPro::SendDMX(int PortLabel, std::array<uint16_t, 512>* universe)
         myDmx[0] = 0;
 
         // send the array here
-        res = FTDI_SendData(PortLabel, myDmx, 513);
+        res = FTDI_SendData(SEND_DMX_PORT1, myDmx, 513);
         if (res != TRUE)
         {
             std::cout << "FAILED to send DMX ... exiting" << std::endl;
@@ -163,7 +166,7 @@ void EnttecPro::ReceiveDMX(int PortLabel)
     }
 }
 
-bool EnttecPro::SendMIDI(int PortLabel, unsigned char channel, unsigned char note, unsigned char velocity)
+bool EnttecPro::SendMIDI(unsigned char channel, unsigned char note, unsigned char velocity)
 {
     unsigned char MyData[3];
     BOOL res =0;
@@ -174,7 +177,7 @@ bool EnttecPro::SendMIDI(int PortLabel, unsigned char channel, unsigned char not
         MyData[2] = velocity;
 
         // send the array here
-        res = FTDI_SendData(PortLabel, MyData, 3);
+        res = FTDI_SendData(SEND_MIDI_PORT, MyData, 3);
         if (res != TRUE)
         {
             std::cerr << "FAILED to send MIDI ... exiting" << std::endl;
@@ -220,7 +223,11 @@ void EnttecPro::ReceiveMIDI(int PortLabel)
 void EnttecPro::FTDI_ClosePort()
 {
     if (_device_handle != NULL)
+    {
         FT_Close(_device_handle);
+        _device_handle = NULL;
+    }
+
 }
 
 
@@ -370,7 +377,7 @@ uint16_t EnttecPro::FTDI_OpenDevice(int device_num)
             major_ver = (uint8_t) version >> 16;
             minor_ver = (uint8_t) version >> 8;
             build_ver = (uint8_t) version & 0xFF;
-            std::cout << "D2XX Driver Version: " << (int)major_ver << "." << (int)minor_ver << "." << (int)build_ver << std::endl;
+            std::cout << "D2XX Driver Version: " << +major_ver << "." << +minor_ver << "." << +build_ver << std::endl;
         }
         else
             printf("Unable to Get D2XX Driver Version") ;
@@ -378,7 +385,7 @@ uint16_t EnttecPro::FTDI_OpenDevice(int device_num)
         // Latency Timer
         ftStatus = FT_GetLatencyTimer (_device_handle,(PUCHAR)&latencyTimer);
         if (ftStatus == FT_OK)
-            std::cout << "Latency Timer: " << (int)latencyTimer << std::endl;
+            std::cout << "Latency Timer: " << +latencyTimer << std::endl;
         else
             std::cout << "Unable to Get Latency Timer" << std::endl;
 
@@ -419,12 +426,12 @@ uint16_t EnttecPro::FTDI_OpenDevice(int device_num)
             // Display All Info avialable
             res = FTDI_SendData(GET_WIDGET_SN,(unsigned char *)&size,2);
             res = FTDI_ReceiveData(GET_WIDGET_SN,(unsigned char *)&temp,4);
-            std::cout << "-----------::USB PRO Connected [Information Follows]::------------" << std::endl;
-            std::cout << "\t  FIRMWARE VERSION: " << VersionMSB << "." << VersionLSB << std::endl;
-            std::cout << "\t  BREAK TIME: " << (int) (_PRO_Params.BreakTime * 10.67) + 100 << " micro sec " << std::endl;
-            std::cout << "\t  MAB TIME: " << (int) (_PRO_Params.MaBTime * 10.67) << " micro sec" << std::endl;
-            std::cout << "\t  SEND REFRESH RATE: " << _PRO_Params.RefreshRate << " packets/sec" << std::endl;
-            std::cout << "----------------------------------------------------------------\n" << std::endl;
+            std::cout << "-----::USB PRO Connected [Information Follows]::------" << std::endl;
+            std::cout << "      FIRMWARE VERSION: " << VersionMSB << "." << VersionLSB << std::endl;
+            std::cout << "      BREAK TIME: " << (int) (_PRO_Params.BreakTime * 10.67) + 100 << " micro sec " << std::endl;
+            std::cout << "      MAB TIME: " << (int) (_PRO_Params.MaBTime * 10.67) << " micro sec" << std::endl;
+            std::cout << "      SEND REFRESH RATE: " << _PRO_Params.RefreshRate << " packets/sec" << std::endl;
+            std::cout << "----------------------------------------------------\n" << std::endl;
             return TRUE;
         }
     }

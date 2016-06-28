@@ -49,7 +49,7 @@ void Group::addHead(Head* newHead)
 
 void Group::updateHeads(std::string channelName, unsigned int value, std::array<unsigned int, 512>* universe)
 {
-    for(int i{0}; i<_heads.size();i++)
+    for(size_t i{0}; i<_heads.size();i++)
     {
         _heads[i]->updateChannel(channelName, value, universe);
     }
