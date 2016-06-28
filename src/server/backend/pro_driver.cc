@@ -114,6 +114,7 @@ bool EnttecPro::SendDMX(std::array<uint8_t, 512>* universe)
 
         // send the array here
         res = FTDI_SendData(SEND_DMX_PORT1, myDmx, 513);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         if (res != TRUE)
         {
             std::cout << "FAILED to send DMX ... exiting" << std::endl;

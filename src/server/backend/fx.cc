@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <cmath>
+
 #include "fx.h"
 #include "./lib/easing.h"
 
@@ -7,11 +9,10 @@ using namespace Moonlight;
 
 FX::FX()
 {
-
     // ## Map easing functions
 
     // Linear interpolation (no easing)
-    _easers["LinearInterpolation"] = LinearInterpolation;
+    _easers["Linear"] = LinearInterpolation;
 
     // Quadratic easing; p^2
     _easers["QuadraticIn"] = QuadraticEaseIn;
@@ -67,4 +68,13 @@ FX::FX()
 FX::~FX()
 {
 
+}
+
+// f: easing style name, b: beginning value, e: end value, d: duration, t: current time
+uint8_t FX::ease(std::string &f, uint8_t &b, uint8_t &e, uint16_t &d, uint16_t &t)
+{
+    if (d == 0 || t >= d) return e;
+    double x = t/(double)d;
+    double y = _easers[f](x);
+    return std::max(0.0, std::min(std::round((e-b)*y+b), 255.0));
 }
