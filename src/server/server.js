@@ -7,21 +7,31 @@ var io      = require('socket.io')(server);
 
 var cfg     = require('../config');
 var logger  = require('../logger');
-var dmx     = require('./dmx');
-var enttec  = require('./enttec');
+var socket  = require('./websocket');
+var dmx     = require('./backend/build/Release/dmx_addon.node');
 
 app.use(express.static(cfg.publicPath + '/views'));
 app.use('/assets', express.static(cfg.publicPath + '/assets'));
 
-app.listen(cfg.httpPort, () => {
-    logger.info('Server listening on port ' + cfg.httpPort);
+app.get('/app', (req, res, next) => {
+    res.sendFile(cfg.publicPath + '/views/index.html');
 });
 
-app.get('/', (req, res) => {
-    res.sendFile('/views/index.html');
+app.get('*', (req, res, next) => {
+    res.redirect('/app');
+});
+
+app.listen(cfg.httpPort, cfg.httpAddress, () => {
+    logger.info('Server listening on http://'+cfg.httpAddress+':'+cfg.httpPort);
+});
+
+// Map websocket events
+socket(io);
+
+server.listen(cfg.ioPort, cfg.httpAddress, () => {
+    logger.info('Socket.IO listening on port ' + cfg.ioPort);
 });
 
 process.on('SIGINT', () => {
-    enttec.close();
     process.exit(0);
 });

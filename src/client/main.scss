@@ -1,5 +1,16 @@
-@import './components/_home';
+@import '~purecss/build/pure';
+
+@import './components/home';
+@import './components/header';
+
+html, body {
+  min-height: 100%;
+}
 
 .site__wrapper {
-    background-color: blue;
+
+}
+
+.app__container {
+    height: 500px;
 }

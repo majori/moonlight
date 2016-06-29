@@ -14,7 +14,7 @@ const App = React.createClass({
     return (
       <div className="site__wrapper">
         <Header />
-        <div className="app-container">
+        <div className="app__container">
           {this.props.children}
         </div>
         <Footer />

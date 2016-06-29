@@ -1,0 +1,22 @@
+.header-wrapper {
+
+}
+
+.header-title {
+    @extend .pure-menu-heading;
+    font-size: 30px;
+}
+
+.header-links {
+    @extend .pure-menu-list;
+
+    li {
+        @extend .pure-menu-item;
+    }
+
+    .header-link {
+        @extend .pure-menu-link;
+
+    }
+
+}
