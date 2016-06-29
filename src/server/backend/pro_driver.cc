@@ -16,6 +16,11 @@ EnttecPro::EnttecPro()
     _device_handle = NULL;
 }
 
+EnttecPro::~EnttecPro()
+{
+    FTDI_ClosePort();
+}
+
 bool EnttecPro::Init()
 {
 
