@@ -18,7 +18,17 @@ DMX::DMX()
 
 DMX::~DMX()
 {
+    // Delete heads
+    for(std::map<int,Head*>::iterator it=_heads.begin(); it!=_heads.end(); ++it)
+    {
+        delete it->second;
+    }
 
+    // Delete groups
+    for(std::map<int,Group*>::iterator it=_groups.begin(); it!=_groups.end(); ++it)
+    {
+        delete it->second;
+    }
 }
 
 void DMX::sendUniverse()
@@ -27,6 +37,7 @@ void DMX::sendUniverse()
 }
 
 int DMX::patchHead(std::vector<std::string> channels, uint16_t startChannel) {
+    if (startChannel == 0) return 0;
     Head* newHead = new Head(channels, startChannel);
     int id = newHead->getID();
     if (id != 0) {

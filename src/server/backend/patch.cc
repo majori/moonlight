@@ -29,7 +29,9 @@ Head::Head(std::vector<std::string> &channels, unsigned short int &startChannel)
     }
     Head::_lastID++;
     _id = _lastID;
-    _startChannel = startChannel;
+
+    // Because arrays start indexing from 0 and DMX from 1, substract 1
+    _startChannel = startChannel-1;
 
 }
 
@@ -57,7 +59,10 @@ Group::Group()
 
 Group::~Group()
 {
-
+    for(std::map<int,Head*>::iterator it=_heads.begin(); it!=_heads.end(); ++it)
+    {
+        delete it->second;
+    }
 }
 
 void Group::addHead(Head* newHead)

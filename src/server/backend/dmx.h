@@ -15,16 +15,16 @@ public:
     DMX();
     ~DMX();
     void sendUniverse();
-    int patchHead(std::vector<std::string>, uint16_t);
+    int  patchHead(std::vector<std::string>, uint16_t);
     void updateHead(int, std::string, uint8_t);
 private:
+    FX        _fx;
     EnttecPro _driver;
-    bool _readyToOutput;
+    bool      _readyToOutput;
 
     std::array<uint8_t, 512> _universe;
-    std::map<int,Group*> _groups;
-    std::map<int,Head*> _heads;
-    FX _fx;
+    std::map<int,Group*>     _groups;
+    std::map<int,Head*>      _heads;
 };
 
 } // Namespace
