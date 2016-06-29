@@ -15,14 +15,15 @@ public:
     DMX();
     ~DMX();
     void sendUniverse();
-    void patchHead(std::vector<std::string>, uint16_t);
+    int patchHead(std::vector<std::string>, uint16_t);
+    void updateHead(int, std::string, uint8_t);
 private:
     EnttecPro _driver;
     bool _readyToOutput;
 
     std::array<uint8_t, 512> _universe;
-    std::vector<Group*> _groups;
-    std::vector<Head*> _heads;
+    std::map<int,Group*> _groups;
+    std::map<int,Head*> _heads;
     FX _fx;
 };
 

@@ -5,21 +5,23 @@
 
 #include <vector>
 #include <array>
-#include "./lib/json.hpp"
+#include <map>
 
 namespace Moonlight {
 
 class Head
 {
 public:
-    Head(std::vector<std::string> channels, unsigned short int startChannel);
+    Head(std::vector<std::string> &channels, unsigned short int &startChannel);
     ~Head();
 
-    void updateChannel(std::string, unsigned int, std::array<unsigned int, 512>*);
+    int getID();
+    void updateChannel(std::string, uint8_t, std::array<uint8_t, 512>*);
 
 private:
-    unsigned short int _id;
-    std::map< std::string, unsigned int >_channels;
+    int _id;
+    static int _lastID;
+    std::map<std::string, uint8_t>_channels;
     unsigned short int _startChannel;
 };
 
@@ -30,11 +32,12 @@ public:
     ~Group();
 
     void addHead(Head*);
-    void updateHeads(std::string, unsigned int, std::array<unsigned int, 512>*);
+    void updateHeads(std::string, uint8_t, std::array<uint8_t, 512>*);
 
 private:
-    unsigned short int _id;
-    std::vector<Head*> _heads;
+    int _id;
+    static int _lastID;
+    std::map<int,Head*> _heads;
 };
 
 } // Namespace

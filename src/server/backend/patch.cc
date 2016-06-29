@@ -3,27 +3,44 @@
 #include "patch.h"
 
 using namespace Moonlight;
-using json = nlohmann::json;
 
 // ## HEAD CLASS
 //
+int Head::_lastID = 0;
+int Group::_lastID = 0;
 
-Head::Head(std::vector<std::string> channels, unsigned short int startChannel)
+Head::Head(std::vector<std::string> &channels, unsigned short int &startChannel)
 {
     if (startChannel > 512)
     {
-        std::cerr << "Invalid start channel for head, " << startChannel << std::endl;
+        std::cerr << "Patch: Invalid start channel " << startChannel << std::endl;
+        _id = 0;
         return;
     }
+    for (uint8_t i{0};i<channels.size();i++)
+    {
+        if (_channels.find(channels[i]) != _channels.end())
+        {
+            std::cerr << "Patch: Channel list have same name twice!" << std::endl;
+            _id = 0;
+            return;
+        }
+        _channels.insert(std::pair<std::string, uint8_t>(channels[i], i));
+    }
+    Head::_lastID++;
+    _id = _lastID;
+    _startChannel = startChannel;
 
 }
 
-Head::~Head()
+Head::~Head() {}
+
+int Head::getID()
 {
-
+    return _id;
 }
 
-void Head::updateChannel(std::string channelName, unsigned int value, std::array<unsigned int, 512>* universe)
+void Head::updateChannel(std::string channelName, uint8_t value, std::array<uint8_t, 512>* universe)
 {
     unsigned int index = _channels.at(channelName);
     universe->at(_startChannel + index) = value;
@@ -34,7 +51,8 @@ void Head::updateChannel(std::string channelName, unsigned int value, std::array
 
 Group::Group()
 {
-
+    Group::_lastID++;
+    _id = Group::_lastID;
 }
 
 Group::~Group()
@@ -44,13 +62,13 @@ Group::~Group()
 
 void Group::addHead(Head* newHead)
 {
-
+    _heads.insert(std::pair<int,Head*>(newHead->getID(), newHead));
 }
 
-void Group::updateHeads(std::string channelName, unsigned int value, std::array<unsigned int, 512>* universe)
+void Group::updateHeads(std::string channelName, uint8_t value, std::array<uint8_t, 512>* universe)
 {
-    for(size_t i{0}; i<_heads.size();i++)
+    for(std::map<int,Head*>::iterator it=_heads.begin(); it!=_heads.end(); ++it)
     {
-        _heads[i]->updateChannel(channelName, value, universe);
+        it->second->updateChannel(channelName, value, universe);
     }
 }
