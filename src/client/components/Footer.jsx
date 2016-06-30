@@ -6,7 +6,11 @@ class Footer extends React.Component {
         this.displayName = 'Footer';
     }
     render() {
-        return <div>Footer</div>;
+        return (
+          <div className="footer-wrapper">
+            Footer
+          </div>
+        )
     }
 }
 

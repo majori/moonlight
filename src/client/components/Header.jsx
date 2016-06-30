@@ -10,10 +10,11 @@ class Header extends React.Component {
         return (
         <div className="header-wrapper pure-menu pure-menu-horizontal">
           <h1 className="header-title">
-            <Link to="/">Moonlight</Link>
+            Moonlight
           </h1>
           <ul className="header-links">
             <li><Link className="header-link" to="/patch">Patch</Link></li>
+            <li><Link className="header-link" to="/control">Control</Link></li>
           </ul>
         </div>
         );

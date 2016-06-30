@@ -2,15 +2,17 @@
 
 @import './components/home';
 @import './components/header';
+@import './components/footer';
 
 html, body {
-  min-height: 100%;
-}
-
-.site__wrapper {
 
 }
 
-.app__container {
-    height: 500px;
+.site-wrapper {
+    overflow: hidden;
+    min-height: 100%;
+}
+
+.app-container {
+
 }

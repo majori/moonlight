@@ -12,6 +12,7 @@
 
     li {
         @extend .pure-menu-item;
+        height: auto;
     }
 
     .header-link {
