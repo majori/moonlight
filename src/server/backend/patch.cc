@@ -9,7 +9,7 @@ using namespace Moonlight;
 int Head::_lastID = 0;
 int Group::_lastID = 0;
 
-Head::Head(std::vector<std::string> &channels, unsigned short int &startChannel)
+Head::Head(std::vector<std::string> &channels, unsigned short int &startChannel, std::string &name)
 {
     if (startChannel > 512)
     {
@@ -29,6 +29,7 @@ Head::Head(std::vector<std::string> &channels, unsigned short int &startChannel)
     }
     Head::_lastID++;
     _id = _lastID;
+    _name = name;
 
     // Because arrays start indexing from 0 and DMX from 1, substract 1
     _startChannel = startChannel-1;
@@ -40,6 +41,21 @@ Head::~Head() {}
 int Head::getID()
 {
     return _id;
+}
+
+std::string Head::getName()
+{
+    return _name;
+}
+
+uint16_t Head::getStartChannel()
+{
+    return _startChannel;
+}
+
+std::map<std::string, uint8_t> Head::getChannels()
+{
+    return _channels;
 }
 
 void Head::updateChannel(std::string channelName, uint8_t value, std::array<uint8_t, 512>* universe)
