@@ -8,18 +8,14 @@ var io      = require('socket.io')(server);
 var cfg     = require('../config');
 var logger  = require('../logger');
 var socket  = require('./websocket');
+var routes  = require('./routes');
 var dmx     = require('./backend/build/Release/dmx_addon.node');
 
 app.use(express.static(cfg.publicPath + '/views'));
 app.use('/assets', express.static(cfg.publicPath + '/assets'));
 
-app.get('/app', (req, res, next) => {
-    res.sendFile(cfg.publicPath + '/views/index.html');
-});
-
-app.get('*', (req, res, next) => {
-    res.redirect('/app');
-});
+// Configure routes
+routes(app);
 
 app.listen(cfg.httpPort, cfg.httpAddress, () => {
     logger.info('Server listening on http://'+cfg.httpAddress+':'+cfg.httpPort);
@@ -29,9 +25,10 @@ app.listen(cfg.httpPort, cfg.httpAddress, () => {
 socket(io);
 
 server.listen(cfg.ioPort, cfg.httpAddress, () => {
-    logger.info('Socket.IO listening on port ' + cfg.ioPort);
+    logger.info('Socket.IO listening on port '+cfg.ioPort);
 });
 
 process.on('SIGINT', () => {
     process.exit(0);
 });
+
