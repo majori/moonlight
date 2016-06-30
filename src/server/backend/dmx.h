@@ -17,6 +17,8 @@ public:
     void sendUniverse();
     int  patchHead(std::vector<std::string>, uint16_t);
     void updateHead(int, std::string, uint8_t);
+    bool outputStatus();
+
 private:
     FX        _fx;
     EnttecPro _driver;

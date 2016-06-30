@@ -4,18 +4,20 @@
 
 #include "dmx.h"
 
-namespace demo {
+namespace Wrapper {
 
 using namespace v8;
 
 Moonlight::DMX dmx = Moonlight::DMX();
 
-void patchHead(const FunctionCallbackInfo<Value>& args);
-void updateHead(const FunctionCallbackInfo<Value>& args);
+void patchHead(const FunctionCallbackInfo<Value>&);
+void updateHead(const FunctionCallbackInfo<Value>&);
+void outputStatus(const FunctionCallbackInfo<Value>&);
 
 void init(Local<Object> exports) {
   NODE_SET_METHOD(exports, "patch_head", patchHead);
   NODE_SET_METHOD(exports, "update_head", updateHead);
+  NODE_SET_METHOD(exports, "status", outputStatus);
 }
 
 void patchHead(const FunctionCallbackInfo<Value>& args)
@@ -62,6 +64,14 @@ void updateHead(const FunctionCallbackInfo<Value>& args)
     args.GetReturnValue().Set(Integer::New(isolate, 1));
 }
 
+void outputStatus(const FunctionCallbackInfo<Value>& args)
+{
+    Isolate* isolate = args.GetIsolate();
+
+    bool status = dmx.outputStatus();
+    args.GetReturnValue().Set(Boolean::New(isolate, status));
+}
+
 NODE_MODULE(dmx_addon, init)
 
-}  // namespace demo
+}  // namespace wrapper

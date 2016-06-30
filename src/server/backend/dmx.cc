@@ -57,3 +57,8 @@ void DMX::updateHead(int id, std::string channelName, uint8_t value)
     it->second->updateChannel(channelName, value, &_universe);
     sendUniverse();
 }
+
+bool DMX::outputStatus()
+{
+    return _readyToOutput;
+}
