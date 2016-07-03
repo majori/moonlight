@@ -2,6 +2,7 @@
 #define _PRO_DRIVER_H
 
 #include <stdint.h>
+#include <array>
 #include "./lib/ftd2xx.h"
 
 /********************** PLEASE SET THESE FIRST **********************************/
@@ -78,29 +79,29 @@ struct ReceivedDmxCosStruct
 class EnttecPro {
 public:
     EnttecPro();
+    ~EnttecPro();
     bool Init();
     bool SendDMX(std::array<uint8_t, 512>*);
     void ReceiveDMX(int PortLabel);
     bool SendMIDI(unsigned char channel, unsigned char note, unsigned char velocity);
     void ReceiveMIDI(int PortLabel);
-    bool setApiKey();
+    std::string getErrMsg();
 
 private:
     int      FTDI_SendData(int label, unsigned char *data, unsigned int length);
     int      FTDI_ReceiveData(int label, unsigned char *data, unsigned int expected_length);
-    uint8_t  FTDI_SendDataToPro(uint8_t label, unsigned char *data, uint32_t length);
-    void*    Get_Pro_Handle();
-    uint8_t  FTDI_ReceiveDataFromPro(uint8_t label, unsigned char *data, uint32_t expected_length);
     uint16_t FTDI_OpenDevice(int device_num);
     int      FTDI_ListDevices();
     void     FTDI_ClosePort();
     void     FTDI_PurgeBuffer();
     void     FTDI_Reload();
-    void     enable_midi();
+    void     Enable_MIDI();
 
     unsigned char _APIKey[4] = {0x00, 0x00, 0x00, 0x00};
     FT_HANDLE _device_handle;
     DMXUSBPROParamsType _PRO_Params;
+    std::string _errorMsg;
+    bool _MIDIOutput;
 
 };
 

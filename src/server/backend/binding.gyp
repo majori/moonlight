@@ -4,6 +4,8 @@
       "target_name": "dmx_addon",
       "cflags": [
         "-Wall",
+        "-Wextra",
+        "-Werror",
         "-std=c++11",
         "-libstdc++",
         "-lpthread",

@@ -2,10 +2,10 @@
 #include <thread>
 #include <vector>
 #include <array>
-#include <ios>
 #include <sstream>
 #include <algorithm>
 #include <iostream>
+#include <string>
 #include <cstring>
 #include <cstdlib>
 
@@ -14,6 +14,8 @@
 EnttecPro::EnttecPro()
 {
     _device_handle = NULL;
+    _errorMsg = "";
+    _MIDIOutput = false;
 }
 
 EnttecPro::~EnttecPro()
@@ -32,7 +34,7 @@ bool EnttecPro::Init()
     // Number of Found Devices
     if (Num_Devices == 0)
     {
-        std::cout << "Looking for Devices - 0 Found" << std::endl;
+        _errorMsg = "Looking for Devices - 0 Found";
         return false;
     }
     else
@@ -49,7 +51,7 @@ bool EnttecPro::Init()
 
             if (!device_connected)
             {
-                std::cerr << "Devices found, but cannot open" << std::endl;
+                _errorMsg = "Devices found, but cannot open";
                 return false;
             }
         }
@@ -64,43 +66,47 @@ bool EnttecPro::Init()
         res = FTDI_ReceiveData(HARDWARE_VERSION_LABEL,(unsigned char *)&hversion,1);
         if (res == TRUE && hversion == 2)
         {
-            std::cout << "PRO Mk2 ... Sending Init Messages ..." << std::endl;
-
+            // ## Use this block if you want enable MIDI
+            // ## (Requires API-key)
+            /*
             // Subscribe API-key
             FTDI_PurgeBuffer();
             res = FTDI_SendData(SET_API_KEY_LABEL,_APIKey,4);
-            if (res != TRUE)
-            {
-                std::cerr << " --- Activation failed " << std::endl;
-            }
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            if (res == TRUE)
+            {
+                // Enable MIDI-output
+                Enable_MIDI();
+                _MIDIOutput = true;
+            }
 
-            // Enable MIDI-output
-            enable_midi();
+            // Test MIDI
+            if ( _MIDIOutput && !SendMIDI(0x10,0x20,0x12) )
+            {
+                _errorMsg = "MIDI testing failed";
+                return false;
+            }
+            */
 
             // Test DMX
             std::array<uint8_t,512> testUniverse;
             testUniverse.fill(0);
             if ( !SendDMX(&testUniverse))
             {
-                std::cerr << " --- DMX testing failed" << std::endl;
+                _errorMsg = "DMX testing failed";
                 return false;
             }
 
-            // Test MIDI
-            if ( !SendMIDI(0x10,0x20,0x12) )
-            {
-                std::cerr << " --- MIDI testing failed" << std::endl;
-                return false;
-            }
 
-            std::cout << "PRO Mk2 initialized succesfully" << std::endl;
+
+            // PRO Mk2 initialized succesfully
+            _errorMsg = "";
             return true;
 
         }
         else
         {
-            std::cerr << "PRO Mk2 has wrong hardware version for some reason" << std::endl;
+            _errorMsg = "PRO Mk2 has wrong hardware version for some reason";
             return false;
         }
     }
@@ -122,7 +128,7 @@ bool EnttecPro::SendDMX(std::array<uint8_t, 512>* universe)
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
         if (res != TRUE)
         {
-            std::cout << "FAILED to send DMX ... exiting" << std::endl;
+            _errorMsg = "Failed to send DMX";
             FTDI_ClosePort();
             return false;
         }
@@ -186,7 +192,7 @@ bool EnttecPro::SendMIDI(unsigned char channel, unsigned char note, unsigned cha
         res = FTDI_SendData(SEND_MIDI_PORT, MyData, 3);
         if (res != TRUE)
         {
-            std::cerr << "FAILED to send MIDI ... exiting" << std::endl;
+            _errorMsg = "FAILED to send MIDI ... exiting";
             FTDI_ClosePort();
             return false;
         }
@@ -259,7 +265,7 @@ void EnttecPro::FTDI_Reload()
     std::this_thread::sleep_for(std::chrono::milliseconds(3500));
     if(ftStatus != FT_OK)
     {
-        std::cout << "Reloading Driver FAILED" << std::endl;
+        _errorMsg = "Reloading Driver FAILED";
     }
     else
         std::cout << "Reloading Driver D2XX PASSED" << std::endl;
@@ -447,7 +453,7 @@ uint16_t EnttecPro::FTDI_OpenDevice(int device_num)
     }
 }
 
-void EnttecPro::enable_midi()
+void EnttecPro::Enable_MIDI()
 {
     uint8_t PortSet[] = {1,2};
     BOOL res = 0;
@@ -463,4 +469,9 @@ void EnttecPro::enable_midi()
     {
         std::cout << "PRO Mk2 ... Failed to enable MIDI ... " << std::endl;
     }
+}
+
+std::string EnttecPro::getErrMsg()
+{
+    return _errorMsg;
 }

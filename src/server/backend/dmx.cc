@@ -67,3 +67,8 @@ std::map<int,Head*> DMX::getHeads()
 {
     return _heads;
 }
+
+std::string DMX::getDriverErrMsg()
+{
+    return _driver.getErrMsg();
+}

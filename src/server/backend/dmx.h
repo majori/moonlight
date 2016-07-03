@@ -15,9 +15,11 @@ public:
     DMX();
     ~DMX();
     void sendUniverse();
-    int  patchHead(std::vector<std::string>, uint16_t);
+    int  patchHead(std::vector<std::string>, uint16_t, std::string);
     void updateHead(int, std::string, uint8_t);
     bool outputStatus();
+    std::map<int,Head*> getHeads();
+    std::string getDriverErrMsg();
 
 private:
     FX        _fx;

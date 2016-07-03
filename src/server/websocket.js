@@ -2,7 +2,7 @@
 var logger = require('../logger');
 var cfg    = require('../config');
 
-module.exports = function(io) {
+module.exports = function(io, dmx) {
     io.on('connection', (socket) => {
 
         // Dev options
@@ -19,5 +19,9 @@ module.exports = function(io) {
                 logger.debug('Client disconnected, id: ' + socket.id);
             });
         }
+
+        socket.on('patch:getHeads', (cb) => {
+
+        });
     });
 };

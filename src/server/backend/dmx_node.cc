@@ -14,12 +14,14 @@ void patchHead(const FunctionCallbackInfo<Value>&);
 void updateHead(const FunctionCallbackInfo<Value>&);
 void outputStatus(const FunctionCallbackInfo<Value>&);
 void getHeads(const FunctionCallbackInfo<Value>& args);
+void getErrMsg(const FunctionCallbackInfo<Value>& args);
 
 void init(Local<Object> exports) {
   NODE_SET_METHOD(exports, "patch_head", patchHead);
   NODE_SET_METHOD(exports, "update_head", updateHead);
   NODE_SET_METHOD(exports, "status", outputStatus);
   NODE_SET_METHOD(exports, "get_heads", getHeads);
+  NODE_SET_METHOD(exports, "get_error_msg", getErrMsg);
 }
 
 void patchHead(const FunctionCallbackInfo<Value>& args)
@@ -116,6 +118,12 @@ void getHeads(const FunctionCallbackInfo<Value>& args) {
         x++;
     }
     args.GetReturnValue().Set(arr);
+}
+
+void getErrMsg(const FunctionCallbackInfo<Value>& args)
+{
+    Isolate* isolate = args.GetIsolate();
+    args.GetReturnValue().Set(String::NewFromUtf8(isolate, dmx.getDriverErrMsg().c_str()));
 }
 
 NODE_MODULE(dmx_addon, init)
