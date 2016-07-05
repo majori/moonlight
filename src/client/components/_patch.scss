@@ -1,0 +1,26 @@
+.patch-page {
+    height: 70%;
+    overflow:auto;
+}
+
+.patch-table {
+    height: 70%;
+    width: 80%;
+    margin: auto;
+
+    overflow-y:scroll;
+}
+
+.patch-number {
+    width: 30%;
+    background-color: red;
+    float: left;
+}
+.patch-data {
+    width: 70%;
+    float: right;
+}
+
+.patch-table-item {
+    height: 30px;
+}

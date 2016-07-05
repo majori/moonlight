@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 
-class Header extends React.Component {
+export default class Header extends React.Component {
     constructor(props) {
         super(props);
         this.displayName = 'Header';
@@ -21,4 +21,3 @@ class Header extends React.Component {
     }
 }
 
-export default Header;

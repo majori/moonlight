@@ -20,8 +20,9 @@ module.exports = function(io, dmx) {
             });
         }
 
-        socket.on('patch:getHeads', (cb) => {
-
+        socket.on('patch:universe:req', () => {
+            console.log('trigger');
+            socket.emit('patch:universe:res', dmx.get_universe());
         });
     });
 };

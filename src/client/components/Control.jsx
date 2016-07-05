@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Control extends React.Component {
+export default class Control extends React.Component {
     constructor(props) {
         super(props);
         this.displayName = 'Control';
@@ -13,5 +13,3 @@ class Control extends React.Component {
         );
     }
 }
-
-export default Control;
