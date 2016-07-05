@@ -36,7 +36,6 @@ setStoreToApi(store);
 if (cfg.env == 'development') {
   socket.on('connect', function () {
     console.log('Connected, id: '+socket.id);
-    socket.emit('patch:universe:req');
   });
   socket.on('ping:req', (timestamp) => {
       socket.emit('ping:res', timestamp);

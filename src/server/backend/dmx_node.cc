@@ -1,5 +1,6 @@
 #include <node.h>
 #include <vector>
+#include <array>
 #include <string>
 
 #include "dmx.h"
@@ -15,6 +16,7 @@ void updateHead(const FunctionCallbackInfo<Value>&);
 void outputStatus(const FunctionCallbackInfo<Value>&);
 void getHeads(const FunctionCallbackInfo<Value>& args);
 void getErrMsg(const FunctionCallbackInfo<Value>& args);
+void getUniverse(const FunctionCallbackInfo<Value>& args);
 
 void init(Local<Object> exports) {
   NODE_SET_METHOD(exports, "patch_head", patchHead);
@@ -22,6 +24,7 @@ void init(Local<Object> exports) {
   NODE_SET_METHOD(exports, "status", outputStatus);
   NODE_SET_METHOD(exports, "get_heads", getHeads);
   NODE_SET_METHOD(exports, "get_error_msg", getErrMsg);
+  NODE_SET_METHOD(exports, "get_universe", getUniverse);
 }
 
 void patchHead(const FunctionCallbackInfo<Value>& args)
@@ -124,6 +127,20 @@ void getErrMsg(const FunctionCallbackInfo<Value>& args)
 {
     Isolate* isolate = args.GetIsolate();
     args.GetReturnValue().Set(String::NewFromUtf8(isolate, dmx.getDriverErrMsg().c_str()));
+}
+
+void getUniverse(const FunctionCallbackInfo<Value>& args)
+{
+    Isolate* isolate = args.GetIsolate();
+
+    Local<Array> arr = Array::New(isolate);
+    std::array<uint8_t, 512> univ = dmx.getUniverse();
+    for (size_t i{0};i<univ.size();i++)
+    {
+        Local<Integer> chan = Integer::New(isolate, univ[i]);
+        arr->Set(i,chan);
+    }
+    args.GetReturnValue().Set(arr);
 }
 
 NODE_MODULE(dmx_addon, init)

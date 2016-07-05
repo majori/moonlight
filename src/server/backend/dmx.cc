@@ -72,3 +72,8 @@ std::string DMX::getDriverErrMsg()
 {
     return _driver.getErrMsg();
 }
+
+std::array<uint8_t, 512> DMX::getUniverse()
+{
+    return _universe;
+}

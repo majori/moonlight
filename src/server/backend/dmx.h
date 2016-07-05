@@ -20,6 +20,7 @@ public:
     bool outputStatus();
     std::map<int,Head*> getHeads();
     std::string getDriverErrMsg();
+    std::array<uint8_t, 512> getUniverse();
 
 private:
     FX        _fx;

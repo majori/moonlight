@@ -9,13 +9,28 @@ export function setStoreToApi(store) {
     storeHandle = store;
 }
 
-socket.on('patch:universe:res', (universe) => {
+socket.on('connect', () => {
+    socket.emit('universe:req');
+});
+
+socket.on('universe:res', (universe) => {
     storeHandle.dispatch(updateUniverse(universe));
 })
+
+socket.on('patch:heads:res', heads => {
+    storeHandle.dispatch(setPatchedHeads(heads));
+});
 
 export function updateUniverse(universe) {
     return {
         type: 'UPDATE_UNIVERSE',
-        universe: universe
+        universe
+    }
+}
+
+export function setPatchedHeads(heads) {
+    return {
+        type: 'SET_PATCHED_HEADS',
+        heads
     }
 }

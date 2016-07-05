@@ -20,9 +20,12 @@ module.exports = function(io, dmx) {
             });
         }
 
-        socket.on('patch:universe:req', () => {
-            console.log('trigger');
-            socket.emit('patch:universe:res', dmx.get_universe());
+        socket.on('universe:req', () => {
+            socket.emit('universe:res', dmx.get_universe());
         });
+
+        socket.on('patch:channels:req', () => {
+            socket.emit('patch:channels:res', dmx.get_heads());
+        })
     });
 };
