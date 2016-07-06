@@ -1,9 +1,8 @@
-'use strict'
 var logger = require('../logger');
 var cfg    = require('../config');
 
-module.exports = function(io, dmx) {
-    io.on('connection', (socket) => {
+module.exports = function(sio, dmx) {
+    sio.on('connection', (socket) => {
 
         // Dev options
         if (cfg.env === 'development') {
@@ -11,7 +10,7 @@ module.exports = function(io, dmx) {
 
             socket.on('ping:res', (pingStart) => {
                 let pingStop = Date.now();
-                logger.debug('Latency: '+(pingStop-pingStart)+'ms');
+                logger.debug('Latency: ' + (pingStop - pingStart) + 'ms');
             });
             socket.emit('ping:req', Date.now());
 
@@ -26,6 +25,6 @@ module.exports = function(io, dmx) {
 
         socket.on('patch:channels:req', () => {
             socket.emit('patch:channels:res', dmx.get_heads());
-        })
+        });
     });
 };

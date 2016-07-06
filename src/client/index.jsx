@@ -1,9 +1,9 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, Link, hashHistory} from 'react-router';
+import { render } from 'react-dom';
+import { Router, Route, Link, hashHistory } from 'react-router';
 
-import { createStore, combineReducers, applyMiddleware} from 'redux';
-import {Provider} from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import cfg from '../config';
@@ -13,7 +13,7 @@ import {
   defaultState as reducerDefaultState
 } from './reducers/reducer';
 
-import {setStoreToApi, socket} from './services/api';
+import { setStoreToApi, socket } from './services/api';
 
 // Import components
 import Home from './components/Home';
@@ -22,7 +22,7 @@ import Footer from './components/Footer';
 import Control from './components/Control';
 
 // Import containers
-import {PatchContainer} from './containers/Patch';
+import { PatchContainer } from './containers/Patch';
 
 // Import styles
 require('./main');
@@ -33,34 +33,34 @@ const store = createStoreWithMiddleware(reducer, reducerDefaultState);
 setStoreToApi(store);
 
 // Dev options
-if (cfg.env == 'development') {
-  socket.on('connect', function () {
-    console.log('Connected, id: '+socket.id);
-  });
-  socket.on('ping:req', (timestamp) => {
-      socket.emit('ping:res', timestamp);
-  });
+if (cfg.env === 'development') {
+    socket.on('connect', () => {
+        console.log('Connected, id: ' + socket.id);
+    });
+    socket.on('ping:req', (timestamp) => {
+        socket.emit('ping:res', timestamp);
+    });
 }
 
-const App = React.createClass({
-  render () {
-    return (
-      <div className='site-wrapper'>
-        <Header />
-        <div className='app-container'>
-          {this.props.children}
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-});
+class App extends React.Component {
+    render() {
+        return (
+          <div className={'site-wrapper'}>
+            <Header />
+            <div className={'app-container'}>
+              {this.props.children}
+            </div>
+            <Footer />
+          </div>
+        );
+    }
+}
 
-const routes =  <Route component={App}>
-  <Route path='/' component={Home} />
-  <Route path='/patch' component={PatchContainer} />
-  <Route path='/control' component={Control} />
-</Route>
+const routes =  (<Route component={App}>
+  <Route path={'/'} component={Home} />
+  <Route path={'/patch'} component={PatchContainer} />
+  <Route path={'/control'} component={Control} />
+</Route>);
 
 
 render((

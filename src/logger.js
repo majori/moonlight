@@ -1,7 +1,7 @@
 var winston = require('winston');
 var cfg     = require('./config');
 
-//Logging config
+// Logging config
 var consoleLog = new (winston.transports.Console)({
     name: 'default-console',
     timestamp: _formatTimestamp(),
@@ -16,36 +16,41 @@ var fileLog = function(logLocation) {
         level: 'info',
         timestamp: _formatTimestamp(),
         formatter: function(options) {
-            return _formatTimestamp() +'--'+ options.level.toUpperCase() +'--'+ (undefined !== options.message ? options.message : '');
+            return _formatTimestamp() + '--' +
+            options.level.toUpperCase() + '--' +
+            (undefined !== options.message ? options.message : '');
         },
         maxsize: 10000000,
         json: false
     });
-}
+};
 
 var logOptions = {};
 switch (cfg.env) {
     case 'development':
-        logOptions.transports = [consoleLog]
-    break;
+        logOptions.transports = [consoleLog];
+        break;
 
     case 'production':
         logOptions.transports = [consoleLog, fileLog('output.log')];
-    break;
+        break;
 
     case 'test':
         logOptions.transports = [fileLog('test/test.log')];
-    break;
+        break;
+
+    default:
+        break;
 }
 
 module.exports = new (winston.Logger)(logOptions);
 
 function _formatTimestamp() {
-    var d = new Date();
-    return d.getFullYear() + '-'
-        + d.getMonth() + '-'
-        + d.getDate() + 'T'
-        + d.getHours() + ':'
-        + d.getMinutes() + ':'
-        + d.getSeconds();
+    var timestamp = new Date();
+    return timestamp.getFullYear() + '-'
+        + timestamp.getMonth() + '-'
+        + timestamp.getDate() + 'T'
+        + timestamp.getHours() + ':'
+        + timestamp.getMinutes() + ':'
+        + timestamp.getSeconds();
 }
