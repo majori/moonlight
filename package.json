@@ -15,7 +15,7 @@
   "author": "Antti Kivimäki <majoriz11@gmail.com>",
   "license": "ISC",
   "engines": {
-    "node": "5.7.0"
+    "node": "6.2.2"
   },
   "dependencies": {
     "bluebird": "^3.4.0",

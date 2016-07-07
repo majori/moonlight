@@ -22,7 +22,7 @@ import Footer from './components/Footer';
 import Control from './components/Control';
 
 // Import containers
-import { PatchContainer } from './containers/Patch';
+import PatchContainer from './containers/Patch';
 
 // Import styles
 require('./main');
@@ -55,6 +55,10 @@ class App extends React.Component {
         );
     }
 }
+
+App.propTypes = {
+    children: React.PropTypes.element
+};
 
 const routes =  (<Route component={App}>
   <Route path={'/'} component={Home} />

@@ -7,20 +7,18 @@
     height: 70%;
     width: 80%;
     margin: auto;
-
+    text-align: center;
     overflow-y:scroll;
 }
 
-.patch-number {
-    width: 30%;
-    background-color: red;
-    float: left;
+.patch-table-head {
+
 }
-.patch-data {
-    width: 70%;
-    float: right;
+
+.patch-table-body {
+
 }
 
 .patch-table-item {
-    height: 30px;
+    height: 20px;
 }

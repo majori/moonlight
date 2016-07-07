@@ -1,5 +1,15 @@
+'use strict'
 var logger = require('../logger');
 var cfg    = require('../config');
+
+// TODO: Create better unpatched head handling
+var unpatched_heads = [
+    require('./heads/adj_megatripar.json'),
+    require('./heads/generic_channel.json'),
+    require('./heads/generic_led.json'),
+    require('./heads/martin_pro_518.json'),
+    require('./heads/stairville_ledpar56.json')
+];
 
 module.exports = function(sio, dmx) {
     sio.on('connection', (socket) => {
@@ -20,11 +30,18 @@ module.exports = function(sio, dmx) {
         }
 
         socket.on('universe:req', () => {
+            logger.debug('Socket: universe:req');
             socket.emit('universe:res', dmx.get_universe());
         });
 
-        socket.on('patch:channels:req', () => {
-            socket.emit('patch:channels:res', dmx.get_heads());
+        socket.on('patch:patched_heads:req', () => {
+            logger.debug('Socket: patch:patched_heads:req');
+            socket.emit('patch:patched_heads:res', dmx.get_heads());
+        });
+
+        socket.on('patch:unpatched_heads:req', () => {
+            logger.debug('Socket: patch:unpatched_heads:req');
+            socket.emit('patch:unpatched_heads:res', unpatched_heads);
         });
     });
 };

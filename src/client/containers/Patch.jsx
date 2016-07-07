@@ -1,22 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fill } from 'lodash';
+import { socket } from '../services/api';
 
 import PatchTableItem from '../components/PatchTableItem';
 
-export default class Patch extends React.Component {
+export class Patch extends React.Component {
     constructor(props) {
         super(props);
         this.displayName = 'Patch';
     }
-    componentWillMount() {
 
+    componentWillMount() {
+        // Request patched and unpatched heads from backend
+        socket.emit('patch:patched_heads:req');
+        socket.emit('patch:unpatched_heads:req');
     }
 
     render() {
         return (
           <div className="patch-page">
-            <table>
+            <table className="patch-table">
               <thead>
                 <tr>
                   <th>Number</th>
@@ -27,6 +30,7 @@ export default class Patch extends React.Component {
               <tbody>
               {
                 this.props.channels.map((channel, index) => {
+
                     if (channel) {
                         return (<PatchTableItem
                           key={index + 1}
@@ -46,19 +50,30 @@ export default class Patch extends React.Component {
     }
 }
 
-function mapStateToProps(state) {
-    const heads = state.get('patch').get('heads').toJS();
-    var arr = new Array(512);
-    fill(arr, null);
+Patch.propTypes = {
+    channels: React.PropTypes.array,
+    unpatchedHeads: React.PropTypes.array
+};
 
-    heads.forEach(head => {
-        for (var i = head.startChannel; i < (head.startChannel + heads.channels.length - 1); i++) {
-            arr[i] = { headName: head.name, channelName: heads.channels[i] };
+// Map patched head's channels to array and get unpatched heads
+// for patching
+function mapStateToProps(state) {
+    const patchedHeads = state.getIn(['patch', 'patched_heads']).toJS();
+    var arr = new Array(512).fill(null); // ES6 feature
+    patchedHeads.forEach(head => {
+
+        const startIndex = head.start_channel - 1;
+        for (var i = startIndex; i < (startIndex + head.channels.length); i++) {
+            arr[i] = {
+                headName: head.name,
+                channelName: head.channels[i - startIndex]
+            };
         }
     });
     return {
-        channels: arr
+        channels: arr,
+        unpatchedHeads: state.getIn(['patch', 'unpatched_heads']).toJS()
     };
 }
 
-export const PatchContainer = connect(mapStateToProps)(Patch);
+export default connect(mapStateToProps)(Patch);
