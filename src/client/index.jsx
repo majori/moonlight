@@ -16,13 +16,12 @@ import {
 import { setStoreToApi, socket } from './services/api';
 
 // Import components
-import Home from './components/Home';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Control from './components/Control';
+import Home from './elements/common/Home';
+import Header from './elements/common/Header';
+import Footer from './elements/common/Footer';
+import Control from './elements/control/Control';
 
-// Import containers
-import PatchContainer from './containers/Patch';
+import PatchContainer from './elements/patch/PatchContainer';
 
 // Import styles
 require('./main');

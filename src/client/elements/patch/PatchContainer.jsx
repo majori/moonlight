@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { socket } from '../services/api';
+import { socket } from '../../services/api';
 
-import PatchTableItem from '../components/PatchTableItem';
+import PatchTableItem from './PatchTableItem';
 
 export class Patch extends React.Component {
     constructor(props) {
@@ -20,14 +20,14 @@ export class Patch extends React.Component {
         return (
           <div className="patch-page">
             <table className="patch-table">
-              <thead>
+              <thead className="patch-table-head">
                 <tr>
                   <th>Number</th>
                   <th>Head name</th>
                   <th>Channel name</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="patch-table-body">
               {
                 this.props.channels.map((channel, index) => {
 
