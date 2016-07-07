@@ -1,15 +1,6 @@
-'use strict'
 var logger = require('../logger');
 var cfg    = require('../config');
-
-// TODO: Create better unpatched head handling
-var unpatched_heads = [
-    require('./heads/adj_megatripar.json'),
-    require('./heads/generic_channel.json'),
-    require('./heads/generic_led.json'),
-    require('./heads/martin_pro_518.json'),
-    require('./heads/stairville_ledpar56.json')
-];
+var headStorage = require('./heads/heads');
 
 module.exports = function(sio, dmx) {
     sio.on('connection', (socket) => {
@@ -41,7 +32,7 @@ module.exports = function(sio, dmx) {
 
         socket.on('patch:unpatched_heads:req', () => {
             logger.debug('Socket: patch:unpatched_heads:req');
-            socket.emit('patch:unpatched_heads:res', unpatched_heads);
+            socket.emit('patch:unpatched_heads:res', headStorage);
         });
     });
 };

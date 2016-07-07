@@ -9,6 +9,7 @@ var socket  = require('./websocket');
 var routes  = require('./routes');
 var dmx     = require('./backend/build/Release/dmx_addon.node');
 
+// TODO: Better error management
 var errMsg = dmx.get_error_msg();
 if (errMsg) logger.error('DMX driver: ' + errMsg);
 

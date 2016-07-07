@@ -53,8 +53,12 @@ void patchHead(const FunctionCallbackInfo<Value>& args)
     v8::String::Utf8Value parsed_name(argsObj->Get(String::NewFromUtf8(isolate, "name")));
     std::string name = std::string(*parsed_name);
 
+    // Parse "from head" ID
+    Handle<Value> parsed_from_head = argsObj->Get(String::NewFromUtf8(isolate, "from_head_id"));
+    int from_head = parsed_from_head->NumberValue();
+
     // Patch head
-    int headID = dmx.patchHead(channels, start_channel, name);
+    int headID = dmx.patchHead(channels, start_channel, name, from_head);
 
     args.GetReturnValue().Set(Integer::New(isolate, headID));
 }
@@ -104,6 +108,11 @@ void getHeads(const FunctionCallbackInfo<Value>& args) {
         // Get start channel
         obj->Set(String::NewFromUtf8(isolate, "start_channel"),
            Integer::New(isolate, it->second->getStartChannel()+1)
+        );
+
+        // Get fromHeadID
+        obj->Set(String::NewFromUtf8(isolate, "from_head_id"),
+           Integer::New(isolate, it->second->getFromHeadID())
         );
 
         // Get channels

@@ -12,21 +12,24 @@ namespace Moonlight {
 class Head
 {
 public:
-    Head(std::vector<std::string> &channels, uint16_t &startChannel, std::string &name);
+    Head(std::vector<std::string> &channels, uint16_t &startChannel, std::string &name, int &fromHeadID);
     ~Head();
 
     int getID();
     std::string getName();
     uint16_t getStartChannel();
     std::map<std::string, uint8_t> getChannels();
+    int getFromHeadID();
     void updateChannel(std::string, uint8_t, std::array<uint8_t, 512>*);
 
 private:
+    static int _lastID;
+
     int _id;
     std::string _name;
-    static int _lastID;
     std::map<std::string, uint8_t> _channels;
     uint16_t _startChannel;
+    int _fromHeadID;
 };
 
 class Group

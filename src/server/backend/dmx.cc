@@ -36,9 +36,9 @@ void DMX::sendUniverse()
     if (_readyToOutput) _driver.SendDMX(&_universe);
 }
 
-int DMX::patchHead(std::vector<std::string> channels, uint16_t startChannel, std::string name) {
+int DMX::patchHead(std::vector<std::string> channels, uint16_t startChannel, std::string name, int fromHeadID) {
     if (startChannel == 0) return 0;
-    Head* newHead = new Head(channels, startChannel, name);
+    Head* newHead = new Head(channels, startChannel, name, fromHeadID);
     int id = newHead->getID();
     if (id != 0) {
         _heads.insert(std::pair<int,Head*>(id, newHead));
