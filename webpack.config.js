@@ -8,7 +8,7 @@ const APP_DIR = path.resolve(__dirname, 'src/client');
 const STYLE_DIR = path.resolve(__dirname, 'public/assets/styles');
 
 module.exports = {
-    entry: APP_DIR + '/index.jsx',
+    entry: [APP_DIR + '/index.jsx'],
     output: {
         path: BUILD_DIR,
         filename: 'bundle.js'
@@ -29,6 +29,7 @@ module.exports = {
             { test: /\.ttf$/,    loader: "file-loader" },
             { test: /\.eot$/,    loader: "file-loader" },
             { test: /\.svg$/,    loader: "file-loader" }
+
         ]
     },
     resolve: {

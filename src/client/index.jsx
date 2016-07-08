@@ -1,15 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link, hashHistory } from 'react-router';
+import { Map } from 'immutable';
 
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
+import { reducer as formReducer } from 'redux-form';
 
 import cfg from '../config';
 
 import {
-  default as reducer,
+  default as appReducer,
   defaultState as reducerDefaultState
 } from './reducers/reducer';
 
@@ -26,9 +28,18 @@ import PatchContainer from './elements/patch/PatchContainer';
 // Import styles
 require('./main');
 
+const reducers = {
+    app: appReducer,
+    form: formReducer
+};
+
+const reducer = combineReducers(reducers);
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
-const store = createStoreWithMiddleware(reducer, reducerDefaultState);
+const store = createStoreWithMiddleware(reducer, {
+    app: reducerDefaultState,
+    form: {}
+});
 setStoreToApi(store);
 
 // Dev options

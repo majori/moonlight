@@ -1,10 +1,10 @@
 import { List, Map, fromJS } from 'immutable';
 
-export const defaultState = fromJS({
-    universe: [],
+export const defaultState = Map({
+    universe: List(),
     patch: Map({
-        patched_heads: List(),
-        unpatched_heads: List()
+        patchedHeads: List(),
+        unpatchedHeads: List()
     })
 });
 
@@ -15,10 +15,10 @@ export default function(state = defaultState, action) {
             return state.set('universe', fromJS(action.universe));
 
         case 'SET_PATCHED_HEADS':
-            return state.setIn(['patch', 'patched_heads'], fromJS(action.heads));
+            return state.setIn(['patch', 'patchedHeads'], fromJS(action.heads));
 
         case 'SET_UNPATCHED_HEADS':
-            return state.setIn(['patch', 'unpatched_heads'], fromJS(action.heads));
+            return state.setIn(['patch', 'unpatchedHeads'], fromJS(action.heads));
 
         default:
             return state;

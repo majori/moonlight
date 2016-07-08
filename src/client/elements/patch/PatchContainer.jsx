@@ -1,5 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
+import { groupBy, map } from 'lodash';
+
 import { socket } from '../../services/api';
 
 import PatchTableItem from './PatchTableItem';
@@ -17,34 +20,71 @@ export class Patch extends React.Component {
     }
 
     render() {
+        var headsByManuf = groupBy(this.props.unpatchedHeads, (head) => {
+            return (head.manufacturer) ? head.manufacturer : '-';
+        });
+
         return (
           <div className="patch-page">
-            <table className="patch-table">
-              <thead className="patch-table-head">
-                <tr>
-                  <th>Number</th>
-                  <th>Head name</th>
-                  <th>Channel name</th>
-                </tr>
-              </thead>
-              <tbody className="patch-table-body">
-              {
-                this.props.channels.map((channel, index) => {
+            <div className="patch-form">
+              <form>
+                <fieldset>
+                  <div className="form__group">
+                    <label>Valitse valaisin: </label>
+                    <select>
+                      {
+                          map(headsByManuf, (heads, manuf) => {
+                              return (<optgroup label={manuf}>
+                              {
+                                heads.map(head => {
+                                  return <option value={head.id}>{getHeadDisplayName(head)}</option>;
+                                })
+                              }
+                              </optgroup>);
+                          })
+                      }
+                    </select>
+                  </div>
+                  <div className="form__group">
+                    <label>Nimi:</label>
+                    <input type="text" placeholder="LedPar_3" {...name}/>
+                  </div>
 
-                    if (channel) {
-                        return (<PatchTableItem
-                          key={index + 1}
-                          index={index + 1}
-                          headName={channel.headName}
-                          channelName={channel.channelName}
-                        />);
-                    } else {
-                        return <PatchTableItem key={index + 1} index={index + 1} />;
-                    }
-                })
-              }
-              </tbody>
-            </table>
+                  <div className="form__controls">
+                    <button type="submit">Tallenna</button>
+                    <button>Peruuta</button>
+                  </div>
+                  </fieldset>
+              </form>
+            </div>
+            <div className="patch-table-wrapper">
+              <table className="patch-table">
+                <thead className="patch-table-head">
+                  <tr>
+                    <th>Number</th>
+                    <th>Head name</th>
+                    <th>Channel name</th>
+                  </tr>
+                </thead>
+                <tbody className="patch-table-body">
+                {
+                  this.props.channels.map((channel, index) => {
+                      index++; // Add one so that array starts from 1
+                      if (channel) {
+                          return (<PatchTableItem
+                            key={index}
+                            index={index}
+                            headName={channel.headName}
+                            channelName={channel.channelName}
+                          />);
+                      } else {
+                          return <PatchTableItem key={index} index={index} />;
+                      }
+                  })
+                }
+                </tbody>
+              </table>
+            </div>
           </div>
         );
     }
@@ -55,10 +95,16 @@ Patch.propTypes = {
     unpatchedHeads: React.PropTypes.array
 };
 
+function getHeadDisplayName(head) {
+    return (head.manufacturer) ?
+        head.manufacturer + ' ' + head.model :
+        head.model;
+}
+
 // Map patched head's channels to array and get unpatched heads
 // for patching
 function mapStateToProps(state) {
-    const patchedHeads = state.getIn(['patch', 'patched_heads']).toJS();
+    const patchedHeads = state.app.getIn(['patch', 'patchedHeads']).toJS();
     var arr = new Array(512).fill(null); // ES6 feature
     patchedHeads.forEach(head => {
 
@@ -72,8 +118,9 @@ function mapStateToProps(state) {
     });
     return {
         channels: arr,
-        unpatchedHeads: state.getIn(['patch', 'unpatched_heads']).toJS()
+        unpatchedHeads: state.app.getIn(['patch', 'unpatchedHeads']).toJS()
     };
 }
 
 export default connect(mapStateToProps)(Patch);
+

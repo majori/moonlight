@@ -1,10 +1,10 @@
 @import '~purecss/build/pure';
 
-@import './components/home';
-@import './components/header';
-@import './components/footer';
+@import './elements/common/home';
+@import './elements/common/header';
+@import './elements/common/footer';
 
-@import './containers/patch';
+@import './elements/patch/patch';
 
 html, body {
 
