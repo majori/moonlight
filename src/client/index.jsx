@@ -38,8 +38,9 @@ const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 const store = createStoreWithMiddleware(reducer, {
     app: reducerDefaultState,
-    form: {}
+    form: { patch: {} }
 });
+
 setStoreToApi(store);
 
 // Dev options

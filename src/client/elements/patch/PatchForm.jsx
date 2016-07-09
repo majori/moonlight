@@ -1,0 +1,97 @@
+import React from 'react';
+import { reduxForm } from 'redux-form';
+import { groupBy, map } from 'lodash';
+
+export class PatchForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.displayName = 'PatchForm';
+    }
+    validate(values) {
+        const errors = {};
+        if (!values.headId) {
+          errors.headId = 'Required';
+        }
+        if (!values.name) {
+          errors.name = 'Required';
+        }
+        // TODO: If name isn't unique
+        // TODO: If start channel is already in use
+        return errors;
+    }
+
+    render() {
+        const {fields: {headId, name, startChannel}, handleSubmit} = this.props;
+
+        // Categorize heads to drop-down menu
+        let headsByManuf = groupBy(this.props.heads, (head) => {
+            return (head.manufacturer) ? head.manufacturer : '-';
+        });
+
+        // TODO: Allow user to choose channel from the PatchTable
+        var channels = [];
+        for (var i = 1; i <= 512; i++) {
+            channels.push(<option key={i} value={i}>{i}</option>);
+        }
+
+        return (
+
+          <form onSubmit={handleSubmit}>
+            <fieldset>
+              <div className="form__group">
+                <label>Select fixture: </label>
+                <select {...headId}>
+                  {
+                      map(headsByManuf, (heads, manuf) => {
+                          return (<optgroup key={manuf} label={manuf}>
+                          {
+                            heads.map(head => {
+                                return (
+                                  <option
+                                    key={head.id}
+                                    value={head.id}
+                                  >
+                                  {
+                                    (head.manufacturer) ?
+                                    head.manufacturer + ' ' + head.model :
+                                    head.model
+                                  }
+                                  </option>);
+                            })
+                          }
+                          </optgroup>);
+                      })
+                  }
+                </select>
+              </div>
+              <div className="form__group">
+                <label>Name:</label>
+                <input type="text" placeholder="LedPar_3" {...name} />
+              </div>
+              <div className="form__group">
+                <label>Start channel:</label>
+                <select {...startChannel}>
+                    {channels}
+                </select>
+              </div>
+              {
+              }
+              <div className="form__controls">
+                <button type="submit" disabled="">Tallenna</button>
+                <button>Peruuta</button>
+              </div>
+            </fieldset>
+          </form>
+        );
+    }
+}
+
+PatchForm.propTypes = {
+    heads: React.PropTypes.array
+};
+
+export default reduxForm({
+    form: 'patch',
+    fields: ['headId', 'name', 'startChannel'],
+    validate: PatchForm.validate
+})(PatchForm);

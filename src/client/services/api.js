@@ -9,9 +9,9 @@ export function setStoreToApi(store) {
     storeHandle = store;
 }
 
+// Things to do upon connection
 socket.on('connect', () => {
-    socket.emit('patch:patched_heads:req');
-    socket.emit('patch:unpatched_heads:req');
+
 });
 
 // ## API calls
