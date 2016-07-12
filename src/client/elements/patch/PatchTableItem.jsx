@@ -1,4 +1,5 @@
 import React from 'react';
+import { capitalizeFirstLetter } from '../../utils/utils';
 
 class PatchTableItem extends React.Component {
     constructor(props) {
@@ -27,10 +28,6 @@ class PatchTableItem extends React.Component {
           </tr>
         );
     }
-}
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 PatchTableItem.propTypes = {

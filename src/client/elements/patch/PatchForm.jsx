@@ -2,6 +2,8 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 import { groupBy, map } from 'lodash';
 
+import { capitalizeFirstLetter } from '../../utils/utils';
+
 export class PatchForm extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +23,9 @@ export class PatchForm extends React.Component {
     }
 
     render() {
-        const {fields: {headId, name, startChannel}, handleSubmit} = this.props;
+        const {fields: {headId, name, startChannel, currentMode}, handleSubmit} = this.props;
+
+        var headSelected = (headId.value !== '') ? true : false;
 
         // Categorize heads to drop-down menu
         let headsByManuf = groupBy(this.props.heads, (head) => {
@@ -32,6 +36,31 @@ export class PatchForm extends React.Component {
         var channels = [];
         for (var i = 1; i <= 512; i++) {
             channels.push(<option key={i} value={i}>{i}</option>);
+        }
+
+        // If head have modes, make user choose one
+        var modeForm = [];
+        var showChannels = [];
+        if (headSelected) {
+            var targetHead = {};
+            this.props.heads.forEach((head) => {
+                if (head.id == headId.value) {
+                    targetHead = head;
+                }
+            });
+            if (targetHead.haveModes) {
+                modeForm.push(<label>Choose mode:</label>);
+                map(targetHead.modes, (mode, key) => {
+                    modeForm.push(<input {...currentMode} type="radio" name="mode" value={key} checked={currentMode.value == key} />);
+                    modeForm.push(key);
+                });
+            } else {
+                showChannels = targetHead.channels;
+            }
+            console.log(currentMode);
+            if (currentMode && currentMode.value) {
+                showChannels = targetHead.modes[currentMode.value];
+            }
         }
 
         return (
@@ -74,8 +103,22 @@ export class PatchForm extends React.Component {
                     {channels}
                 </select>
               </div>
-              {
-              }
+              <div>
+                {modeForm}
+              </div>
+              <div>
+                <table>
+                  <tbody>
+                    <tr>
+                    {
+                        showChannels.map((chan) => {
+                            return <td>{capitalizeFirstLetter(chan)}</td>;
+                        })
+                    }
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <div className="form__controls">
                 <button type="submit" disabled="">Tallenna</button>
                 <button>Peruuta</button>
@@ -92,6 +135,6 @@ PatchForm.propTypes = {
 
 export default reduxForm({
     form: 'patch',
-    fields: ['headId', 'name', 'startChannel'],
+    fields: ['headId', 'name', 'startChannel', 'currentMode'],
     validate: PatchForm.validate
 })(PatchForm);
