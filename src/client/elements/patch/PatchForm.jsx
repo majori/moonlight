@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { groupBy, map } from 'lodash';
 
@@ -12,18 +12,27 @@ export class PatchForm extends React.Component {
     validate(values) {
         const errors = {};
         if (!values.headId) {
-          errors.headId = 'Required';
+            errors.headId = 'Required';
         }
         if (!values.name) {
-          errors.name = 'Required';
+            errors.name = 'Required';
         }
         // TODO: If name isn't unique
         // TODO: If start channel is already in use
         return errors;
     }
 
+    handleHeadChange() {
+
+    }
+
     render() {
-        const {fields: {headId, name, startChannel, currentMode}, handleSubmit} = this.props;
+        const { fields: {
+            headId,
+            name,
+            startChannel,
+            currentMode
+        }, handleSubmit } = this.props;
 
         var headSelected = (headId.value !== '') ? true : false;
 
@@ -38,6 +47,7 @@ export class PatchForm extends React.Component {
             channels.push(<option key={i} value={i}>{i}</option>);
         }
 
+        // TODO: Remove mode form when changing head
         // If head have modes, make user choose one
         var modeForm = [];
         var showChannels = [];
@@ -51,17 +61,26 @@ export class PatchForm extends React.Component {
             if (targetHead.haveModes) {
                 modeForm.push(<label>Choose mode:</label>);
                 map(targetHead.modes, (mode, key) => {
-                    modeForm.push(<input {...currentMode} type="radio" name="mode" value={key} checked={currentMode.value == key} />);
+                    modeForm.push(<input
+                      {...currentMode}
+                      type="radio"
+                      name="mode"
+                      value={key}
+                      checked={currentMode.value == key}
+                    />);
                     modeForm.push(key);
                 });
             } else {
                 showChannels = targetHead.channels;
             }
-            console.log(currentMode);
-            if (currentMode && currentMode.value) {
+
+            if (headSelected.haveModes && currentMode && currentMode.value) {
                 showChannels = targetHead.modes[currentMode.value];
             }
         }
+
+        // TODO: Suggest name for new head
+        // TODO: Validate form
 
         return (
 
@@ -69,7 +88,7 @@ export class PatchForm extends React.Component {
             <fieldset>
               <div className="form__group">
                 <label>Select fixture: </label>
-                <select {...headId}>
+                <select {...headId} onChange={this.handleHeadChange}>
                   {
                       map(headsByManuf, (heads, manuf) => {
                           return (<optgroup key={manuf} label={manuf}>
@@ -99,9 +118,7 @@ export class PatchForm extends React.Component {
               </div>
               <div className="form__group">
                 <label>Start channel:</label>
-                <select {...startChannel}>
-                    {channels}
-                </select>
+                <input type="number" placeholder="1-512" {...startChannel} />
               </div>
               <div>
                 {modeForm}
@@ -130,7 +147,9 @@ export class PatchForm extends React.Component {
 }
 
 PatchForm.propTypes = {
-    heads: React.PropTypes.array
+    fields: PropTypes.object.isRequired,
+    heads: PropTypes.array.isRequired,
+    handleSubmit: PropTypes.func.isRequired
 };
 
 export default reduxForm({

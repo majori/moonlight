@@ -19,7 +19,8 @@ export class Patch extends React.Component {
     }
 
     handleFormSubmit(formValues) {
-      console.log(formValues);
+        // TODO: Convert form data to patchable head
+        console.log(formValues);
     }
 
     render() {
